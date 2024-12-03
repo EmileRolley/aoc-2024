@@ -3,23 +3,22 @@ open Day
 
 let get_input _ = "inputs/day01/inputs.txt"
 
-let parse_pairs lines =
+let parse_pairs =
   List.map
     ~f:
-      (Utils.try_parse
-         [ Utils.parse "%d   %d" (fun a b -> a, b); (* EOF *) Utils.parse "" (0, 0) ])
-    lines
+      (Utils.try_scan
+         [ Utils.scan "%d   %d" (fun a b -> a, b); (* EOF *) Utils.scan "" (0, 0) ])
 ;;
 
 let part_1 lines =
   let l, r = parse_pairs lines |> List.unzip in
   List.zip_exn (List.sort ~compare:Int.compare l) (List.sort ~compare:Int.compare r)
-  |> List.fold_left ~init:0 ~f:(fun sum (l, r) -> sum + Int.abs (l - r))
+  |> List.fold ~init:0 ~f:(fun sum (l, r) -> sum + Int.abs (l - r))
 ;;
 
 let part_2 lines =
   let get_nb_occurences =
-    List.fold_left
+    List.fold
       ~init:(Map.empty (module Int))
       ~f:(fun acc x ->
         Map.change acc x ~f:(function

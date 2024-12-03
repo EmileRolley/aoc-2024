@@ -1,4 +1,4 @@
 (library
  (name aoc)
  (modules :standard)
- (libraries core))
+ (libraries core angstrom))

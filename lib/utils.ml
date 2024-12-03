@@ -13,7 +13,7 @@ let read_input input =
   lines
 ;;
 
-let parse fmt map line =
+let scan fmt map line =
   try Some (Scanf.sscanf line fmt map) with
   | _ -> None
 ;;
@@ -23,12 +23,12 @@ let parse fmt map line =
     {[
       let parser = try_parse [ parse "%d" (fun x -> `Num x) ] "42"
     ]} *)
-let rec try_parse parsers line =
-  match parsers with
+let rec try_scan scanners line =
+  match scanners with
   | [] -> failwith ("Could not parse line: " ^ line)
-  | parser :: parsers ->
-    (match parser line with
-     | None -> try_parse parsers line
+  | scan :: scanners ->
+    (match scan line with
+     | None -> try_scan scanners line
      | Some result -> result)
 ;;
 
@@ -44,3 +44,15 @@ let array_remove arr i =
   then Core.Array.slice arr 1 0
   else Core.Array.concat [ Core.Array.slice arr 0 i; Core.Array.slice arr (i + 1) 0 ]
 ;;
+
+module Parse = struct
+  open Core
+  open Angstrom
+
+  let integer =
+    take_while1 (function
+      | '0' .. '9' -> true
+      | _ -> false)
+    >>| Int.of_string
+  ;;
+end
