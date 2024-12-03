@@ -1,4 +1,4 @@
 (library
  (name aoc)
- (modules utils day day01)
+ (modules :standard)
  (libraries core))

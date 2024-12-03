@@ -31,3 +31,16 @@ let rec try_parse parsers line =
      | None -> try_parse parsers line
      | Some result -> result)
 ;;
+
+(** Return a new array without the element at index [i].
+
+    {[
+      let arr = [| 1; 2; 3 |] in
+      let arr' = array_remove arr 1 in
+      assert (arr' = [| 1; 3 |])
+    ]} *)
+let array_remove arr i =
+  if i = 0
+  then Core.Array.slice arr 1 0
+  else Core.Array.concat [ Core.Array.slice arr 0 i; Core.Array.slice arr (i + 1) 0 ]
+;;
