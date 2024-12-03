@@ -15,7 +15,6 @@ let part_1 lines =
   let l, r = parse_pairs lines |> List.unzip in
   List.zip_exn (List.sort ~compare:Int.compare l) (List.sort ~compare:Int.compare r)
   |> List.fold_left ~init:0 ~f:(fun sum (l, r) -> sum + Int.abs (l - r))
-  |> Int.to_string
 ;;
 
 let part_2 lines =
@@ -36,7 +35,6 @@ let part_2 lines =
     | None -> acc
     | Some nb_occurences_in_right ->
       (nb_occurences_in_left * (num * nb_occurences_in_right)) + acc)
-  |> Int.to_string
 ;;
 
 let part = function

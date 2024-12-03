@@ -9,5 +9,5 @@ let part_to_int = function
 
 module type DAY = sig
   val get_input : part -> string
-  val part : part -> string list -> string
+  val part : part -> string list -> int
 end
