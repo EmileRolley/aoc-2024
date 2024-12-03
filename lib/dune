@@ -1,3 +1,4 @@
 (library
  (name aoc)
- (modules day day01))
+ (modules utils day day01)
+ (libraries core))
