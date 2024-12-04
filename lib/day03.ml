@@ -3,39 +3,38 @@ open Day
 
 let get_input = function
   | P1 -> "inputs/day03/inputs_part1.txt"
-  | P2 -> "inputs/day03/test_part2.txt"
+  | P2 -> "inputs/day03/inputs_part2.txt"
 ;;
 
-let parse_mul lines =
+let parse_mul =
   let open Angstrom in
-  let mul =
-    string "mul(" *> Utils.Parse.integer
-    >>= fun left ->
-    char ',' *> Utils.Parse.integer <* char ')' >>| fun right -> Some (left, right)
-  in
-  let all_muls =
-    many
-      (skip_while (function
-         | 'm' -> false
-         | _ -> true)
-       *> choice [ mul; char 'm' *> return None ])
-  in
+  string "mul(" *> Utils.Parse.integer
+  >>= fun left ->
+  char ',' *> Utils.Parse.integer <* char ')' >>| fun right -> Some (left, right)
+;;
+
+let parse_lines_with parser lines =
   lines
-  |> List.map ~f:(fun line ->
-    match parse_string ~consume:Prefix all_muls line with
-    | Ok str -> str
-    | _ -> failwith "Could not parse line")
-  |> List.join
+  |> String.concat ~sep:""
+  |> Angstrom.parse_string ~consume:Prefix parser
+  |> Result.ok_or_failwith
+;;
+
+let parse_all_mul =
+  parse_lines_with Angstrom.(many (parse_mul <|> any_char *> return None))
+;;
+
+let parse_all_enabled_mul =
+  let open Angstrom in
+  let skip_dont = string "don't()" *> many_till any_char (string "do()") in
+  parse_lines_with
+    (many (skip_dont *> return None <|> parse_mul <|> any_char *> return None))
+;;
+
+let part p lines =
+  (match p with
+   | P1 -> parse_all_mul lines
+   | P2 -> parse_all_enabled_mul lines)
   |> List.filter_map ~f:Fn.id
-;;
-
-let part_1 lines =
-  parse_mul lines |> List.fold ~init:0 ~f:(fun acc (l, r) -> (l * r) + acc)
-;;
-
-let part_2 _ = 0
-
-let part = function
-  | P1 -> part_1
-  | P2 -> part_2
+  |> List.fold ~init:0 ~f:(fun acc (l, r) -> (l * r) + acc)
 ;;
