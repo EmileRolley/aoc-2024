@@ -56,3 +56,10 @@ module Parse = struct
     >>| Int.of_string
   ;;
 end
+
+let consume_if ~cond ~f x = if cond then f x else ()
+
+let cond_apply_and_sum_all fs =
+  let open Core in
+  List.fold ~init:0 ~f:(fun acc (cond, f) -> if cond then acc + f () else acc) fs
+;;
