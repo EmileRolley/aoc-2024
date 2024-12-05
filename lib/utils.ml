@@ -55,4 +55,16 @@ module Parse = struct
       | _ -> false)
     >>| Int.of_string
   ;;
+
+  let parse_lines_with parser lines =
+    lines
+    |> String.concat ~sep:""
+    |> Angstrom.parse_string ~consume:Prefix parser
+    |> Result.ok_or_failwith
+  ;;
 end
+
+let get_center_elem l =
+  let open Core in
+  List.nth_exn l (List.length l / 2)
+;;
