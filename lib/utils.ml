@@ -68,3 +68,11 @@ let get_center_elem l =
   let open Core in
   List.nth_exn l (List.length l / 2)
 ;;
+
+let position_compare (x, y) (x', y') =
+  match Int.compare y y' with
+  | 0 -> Int.compare x x'
+  | c -> c
+;;
+
+let position_to_string (x, y) = Printf.sprintf "(%d, %d)" x y

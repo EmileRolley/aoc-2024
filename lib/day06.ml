@@ -30,12 +30,6 @@ let turn_right = function
   | `Left -> `Up
 ;;
 
-let position_compare (x, y) (x', y') =
-  match Int.compare y y' with
-  | 0 -> Int.compare x x'
-  | c -> c
-;;
-
 let parse_map =
   List.foldi
     ~init:([], { pos = 0, 0; facing = `Up })
@@ -77,7 +71,7 @@ let walk ~until ~obstructions ~guard:guard_pos =
 let part_1 _ _ is_not_in_map obstructions guard =
   walk ~until:(fun _ guard -> is_not_in_map guard.pos) ~obstructions ~guard
   |> List.map ~f:(fun guard -> guard.pos)
-  |> List.stable_dedup ~compare:position_compare
+  |> List.stable_dedup ~compare:Utils.position_compare
   |> List.length
   |> ( + ) Int.minus_one
 ;;
