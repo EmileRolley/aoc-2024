@@ -75,16 +75,22 @@ let position_compare (x, y) (x', y') =
   | c -> c
 ;;
 
+let position_equal (x, y) (x', y') = x = x' && y = y'
 let position_to_string (x, y) = Printf.sprintf "(%d, %d)" x y
 
-let list_replace l ~at ~c =
+let list_replace l ~at ~e =
   let open Core in
   let left = List.slice l 0 at in
   let right = List.slice l (at + 1) 0 in
-  left @ (c :: right)
+  if at = 0 then e :: right else left @ (e :: right)
 ;;
 
 let string_drop_last str =
   let open Core in
   String.slice str 0 (String.length str - 1)
+;;
+
+let list_remove l ~at =
+  let open Core in
+  if at = 0 then List.slice l 1 0 else List.slice l 0 at @ List.slice l (at + 1) 0
 ;;
