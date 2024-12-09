@@ -76,3 +76,15 @@ let position_compare (x, y) (x', y') =
 ;;
 
 let position_to_string (x, y) = Printf.sprintf "(%d, %d)" x y
+
+let list_replace l ~at ~c =
+  let open Core in
+  let left = List.slice l 0 at in
+  let right = List.slice l (at + 1) 0 in
+  left @ (c :: right)
+;;
+
+let string_drop_last str =
+  let open Core in
+  String.slice str 0 (String.length str - 1)
+;;
