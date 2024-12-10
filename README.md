@@ -1,4 +1,4 @@
-# Advent of Code 2024 (19/48 ⭐)
+# Advent of Code 2024 (20/48 ⭐)
 
 My solutions to the [Advent of Code 2024](https://adventofcode.com/2024)
 puzzles in [OCaml](https://ocaml.org/).
