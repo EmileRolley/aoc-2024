@@ -8,6 +8,7 @@ module Day06 = Runnable.Make (Aoc.Day06)
 module Day07 = Runnable.Make (Aoc.Day07)
 module Day08 = Runnable.Make (Aoc.Day08)
 module Day09 = Runnable.Make (Aoc.Day09)
+module Day10 = Runnable.Make (Aoc.Day10)
 
 let () =
   let args = Sys.get_argv () in
@@ -24,5 +25,6 @@ let () =
     | "07" | "7" -> Day07.run ()
     | "08" | "8" -> Day08.run ()
     | "09" | "9" -> Day09.run ()
+    | "10" -> Day10.run ()
     | _ -> Printf.printf "No such day\n")
 ;;

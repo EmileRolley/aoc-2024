@@ -94,3 +94,29 @@ let list_remove l ~at =
   let open Core in
   if at = 0 then List.slice l 1 0 else List.slice l 0 at @ List.slice l (at + 1) 0
 ;;
+
+module Matrix = struct
+  open Core
+
+  let make ~dimx ~dimy v = Array.make_matrix ~dimx ~dimy v
+
+  let iteri m ~f =
+    Array.iteri m ~f:(fun y row -> Array.iteri row ~f:(fun x elem -> f ~x ~y elem))
+  ;;
+
+  let fold_in m ~start:(i, j) ~stop:(i', j') ~init ~f =
+    let res = ref init in
+    let min_i = max 0 i in
+    let min_j = max 0 j in
+    let max_i = min (Array.length m) i' in
+    let max_j = min (Array.length m.(0)) j' in
+    for i'' = min_i to max_i - 1 do
+      for j'' = min_j to max_j - 1 do
+        res := f !res ~pos:(i'', j'') ~e:m.(i'').(j'')
+      done
+    done;
+    !res
+  ;;
+
+  let get m (x, y) = m.(y).(x)
+end
