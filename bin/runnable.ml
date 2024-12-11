@@ -1,13 +1,17 @@
 open Core
 
 module type S = sig
-  val run : unit -> unit
+  val run : Aoc.Day.part option -> unit
 end
 
 module Make (D : Aoc.Day.DAY) : S = struct
-  let run () =
-    [ P1; P2 ]
-    |> List.map ~f:(fun p ->
+  let run part =
+    let parts =
+      match part with
+      | Some p -> [ p ]
+      | None -> [ Aoc.Day.P1; Aoc.Day.P2 ]
+    in
+    List.map parts ~f:(fun p ->
       D.get_input p
       |> Aoc.Utils.read_input
       |> D.part p

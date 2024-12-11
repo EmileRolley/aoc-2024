@@ -78,21 +78,9 @@ let position_compare (x, y) (x', y') =
 let position_equal (x, y) (x', y') = x = x' && y = y'
 let position_to_string (x, y) = Printf.sprintf "(%d, %d)" x y
 
-let list_replace l ~at ~e =
-  let open Core in
-  let left = List.slice l 0 at in
-  let right = List.slice l (at + 1) 0 in
-  if at = 0 then e :: right else left @ (e :: right)
-;;
-
 let string_drop_last str =
   let open Core in
   String.slice str 0 (String.length str - 1)
-;;
-
-let list_remove l ~at =
-  let open Core in
-  if at = 0 then List.slice l 1 0 else List.slice l 0 at @ List.slice l (at + 1) 0
 ;;
 
 module Matrix = struct
@@ -119,4 +107,23 @@ module Matrix = struct
   ;;
 
   let get m (x, y) = m.(y).(x)
+end
+
+module List = struct
+  let replace l ~at ~e =
+    let open Core in
+    let left = List.slice l 0 at in
+    let right = List.slice l (at + 1) 0 in
+    if at = 0 then e :: right else left @ (e :: right)
+  ;;
+
+  let remove l ~at =
+    let open Core in
+    if at = 0 then List.slice l 1 0 else List.slice l 0 at @ List.slice l (at + 1) 0
+  ;;
+
+  let map_n l ~f ~n =
+    let rec aux l n = if n = 0 then l else aux (f l) (n - 1) in
+    aux l n
+  ;;
 end

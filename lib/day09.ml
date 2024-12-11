@@ -86,11 +86,11 @@ let part_2 line =
           | Some (i, (free_start, free_stop)) when free_start < fst file.range ->
             if free_stop - free_start = file.size
             then
-              ( file.range :: Utils.list_remove free ~at:i
+              ( file.range :: Utils.List.remove free ~at:i
               , (file.id, (free_start, free_stop)) :: res )
             else (
               let replaced =
-                Utils.list_replace free ~at:i ~e:(free_start + file.size, free_stop)
+                Utils.List.replace free ~at:i ~e:(free_start + file.size, free_stop)
               in
               ( file.range :: replaced
               , (file.id, (free_start, free_start + file.size)) :: res ))
