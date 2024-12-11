@@ -13,7 +13,7 @@ let parse_pairs =
 let part_1 lines =
   let l, r = parse_pairs lines |> List.unzip in
   List.zip_exn (List.sort ~compare:Int.compare l) (List.sort ~compare:Int.compare r)
-  |> List.fold ~init:0 ~f:(fun sum (l, r) -> sum + Int.abs (l - r))
+  |> Utils.List.sum ~f:(fun (l, r) -> Int.abs (l - r))
 ;;
 
 let part_2 lines =

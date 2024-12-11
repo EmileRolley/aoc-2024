@@ -29,5 +29,5 @@ let part p lines =
    | P1 -> parse_all_mul lines
    | P2 -> parse_all_enabled_mul lines)
   |> List.filter_map ~f:Fn.id
-  |> List.fold ~init:0 ~f:(fun acc (l, r) -> (l * r) + acc)
+  |> Utils.List.sum ~f:(fun (l, r) -> l * r)
 ;;
