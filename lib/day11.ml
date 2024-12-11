@@ -25,23 +25,27 @@ let blink = function
 
 let memoized_blink_n stones ~n =
   let memo = Hashtbl.create (module String) in
-  let rec aux s ~n =
-    let key = Printf.sprintf "%d-%d" n s in
-    match Hashtbl.find memo key with
-    | Some v -> v
-    | None ->
-      let res = if n = 0 then 1 else blink s |> Utils.List.sum ~f:(aux ~n:(n - 1)) in
-      Hashtbl.set memo ~key ~data:res;
-      res
+  let rec blink_n stone ~n =
+    if n = 0
+    then 1
+    else (
+      let key = Printf.sprintf "%d-%d" n stone in
+      match Hashtbl.find memo key with
+      | Some v -> v
+      | None ->
+        let res = Utils.List.sum (blink stone) ~f:(blink_n ~n:(n - 1)) in
+        Hashtbl.set memo ~key ~data:res;
+        res)
   in
-  Utils.List.sum stones ~f:(aux ~n)
+  Utils.List.sum stones ~f:(blink_n ~n)
 ;;
 
 let part part lines =
-  let n =
-    match part with
-    | P1 -> 25
-    | P2 -> 75
-  in
-  parse_stones (List.hd_exn lines) |> memoized_blink_n ~n
+  List.hd_exn lines
+  |> parse_stones
+  |> memoized_blink_n
+       ~n:
+         (match part with
+          | P1 -> 25
+          | P2 -> 75)
 ;;
