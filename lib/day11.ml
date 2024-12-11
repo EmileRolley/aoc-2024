@@ -15,14 +15,26 @@ let split_stone stone =
   else None
 ;;
 
-let blink stones =
-  List.map stones ~f:(function
-    | 0 -> [ 1 ]
-    | n ->
-      (match split_stone n with
-       | Some (a, b) -> [ Int.of_string a; Int.of_string b ]
-       | None -> [ n * 2024 ]))
-  |> List.join
+let blink = function
+  | 0 -> [ 1 ]
+  | n ->
+    (match split_stone n with
+     | Some (a, b) -> [ Int.of_string a; Int.of_string b ]
+     | None -> [ n * 2024 ])
+;;
+
+let memoized_blink_n stones ~n =
+  let memo = Hashtbl.create (module String) in
+  let rec aux s ~n =
+    let key = Printf.sprintf "%d-%d" n s in
+    match Hashtbl.find memo key with
+    | Some v -> v
+    | None ->
+      let res = if n = 0 then 1 else blink s |> Utils.List.sum ~f:(aux ~n:(n - 1)) in
+      Hashtbl.set memo ~key ~data:res;
+      res
+  in
+  Utils.List.sum stones ~f:(aux ~n)
 ;;
 
 let part part lines =
@@ -31,8 +43,5 @@ let part part lines =
     | P1 -> 25
     | P2 -> 75
   in
-  parse_stones (List.hd_exn lines)
-  |> List.map ~f:(fun l -> Utils.List.map_n [ l ] ~f:blink ~n)
-  |> List.join
-  |> List.length
+  parse_stones (List.hd_exn lines) |> memoized_blink_n ~n
 ;;

@@ -110,15 +110,15 @@ module Matrix = struct
 end
 
 module List = struct
+  open Core
+
   let replace l ~at ~e =
-    let open Core in
     let left = List.slice l 0 at in
     let right = List.slice l (at + 1) 0 in
     if at = 0 then e :: right else left @ (e :: right)
   ;;
 
   let remove l ~at =
-    let open Core in
     if at = 0 then List.slice l 1 0 else List.slice l 0 at @ List.slice l (at + 1) 0
   ;;
 
@@ -126,4 +126,6 @@ module List = struct
     let rec aux l n = if n = 0 then l else aux (f l) (n - 1) in
     aux l n
   ;;
+
+  let sum l ~f = List.fold l ~init:0 ~f:(fun acc e -> acc + f e)
 end
